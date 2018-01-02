@@ -1,4 +1,5 @@
 import React from 'react' //have to do this at the top in every single component. Not like jQuery where you load it on the page and it's available to everyone. With ES6 modules if you need something within a JS module, you have to import it in every single file that you need it
+import base from '../base'
 import Fish from './Fish'
 import Header from './Header'
 import Inventory from './Inventory'
@@ -19,6 +20,18 @@ class App extends React.Component {
       order: {}
     }
   }
+
+  componentWillMount() {
+    this.ref = base.syncState(`${this.props.params.storeId}/fishes`, {
+      context: this,
+      state: 'fishes'
+    })
+  }
+
+  componentWillUnmount() {
+    base.removeBinding(this.ref)
+  }
+
   addFish(fish) {
     //update our state
     const fishes = {...this.state.fishes} //this is our existing fishes state. ... is a spread. it takes every item from our object, and spreads it into our object.
